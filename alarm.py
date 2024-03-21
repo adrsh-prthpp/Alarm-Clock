@@ -1,9 +1,13 @@
 from threading import Thread
 from tkinter.ttk import *
 from tkinter import *
+import tkinter.messagebox as messagebox
+import tkinter.simpledialog as simpledialog
 
 from datetime import datetime
 from time import sleep
+
+import random
 
 color1 = 'black'
 color2 = 'white'
@@ -40,13 +44,31 @@ c_period['values'] = ("AM", "PM")
 c_period.current(0)  # Set default value to "AM"
 c_period.place(x=265, y=40)
 
+def ask_math_problem():
+        num1 = random.randint(1, 10)
+        num2 = random.randint(1, 10)
+        operator = random.choice(['+', '-', '*'])
+        expression = f"{num1} {operator} {num2}"
+
+        answer = eval(expression)  # Calculate the answer
+
+        user_response = simpledialog.askinteger("Math Problem", f"What is the answer to: {expression}?")
+
+        if user_response is not None:  # Check if the user provided an answer
+            if user_response == answer:
+                messagebox.showinfo("Success", "Alarm Deactivated!")
+            else:
+                messagebox.showinfo("Failure", "Incorrect answer. Alarm not deactivated.")
+                ask_math_problem()
 
 def activate_alarm():
     t = Thread(target=alarm)
     t.start()
 
 
+
 def deactivate_alarm():
+    ask_math_problem()
     global running_flag  # Access the global flag
     print('Deactivated alarm: ', selected.get())
     running_flag = False  # Stop the flashing process
